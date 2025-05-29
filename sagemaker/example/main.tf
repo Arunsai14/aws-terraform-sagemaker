@@ -62,21 +62,12 @@ resource "aws_s3_bucket_acl" "sagemaker_bucket_acl" {
   acl    = "private"
 }
 
-# Use existing VPC and subnets
-data "aws_vpc" "existing" {
-  id = var.vpc_id
-}
-
-data "aws_subnet" "private" {
-  count = length(var.subnet_ids)
-  id    = var.subnet_ids[count.index]
-}
 
 # Security group for SageMaker
 resource "aws_security_group" "sagemaker_sg" {
   name        = "sagemaker-security-group"
   description = "Security group for SageMaker resources"
-  vpc_id      = data.aws_vpc.existing.id
+  vpc_id      = data.aws_vpc.default.id
 
   ingress {
     from_port   = 443
@@ -103,8 +94,8 @@ module "sagemaker" {
   create_domain         = var.create_domain
   domain_name           = var.domain_name
   auth_mode             = var.auth_mode
-  vpc_id                = data.aws_vpc.existing.id
-  subnet_ids            = var.subnet_ids
+  vpc_id                = data.aws_vpc.default.id
+  subnet_ids            = tolist(data.aws_subnets.private.ids)
   domain_execution_role_arn = aws_iam_role.sagemaker_role.arn
   app_network_access_type = var.app_network_access_type
   domain_security_groups = [aws_security_group.sagemaker_sg.id]
@@ -128,7 +119,7 @@ module "sagemaker" {
   notebook_role_arn     = aws_iam_role.sagemaker_role.arn
   notebook_instance_type = var.notebook_instance_type
   notebook_volume_size  = var.notebook_volume_size
-  notebook_subnet_id    = var.subnet_ids[0]
+  notebook_subnet_id    = data.aws_subnets.private.ids[0]
   notebook_security_groups = [aws_security_group.sagemaker_sg.id]
   notebook_direct_internet_access = "Enabled"
   
@@ -140,7 +131,7 @@ module "sagemaker" {
   model_name            = var.model_name
   model_execution_role_arn = aws_iam_role.sagemaker_role.arn
   model_primary_container = {
-    image = "${var.account_id}.dkr.ecr.${var.region}.amazonaws.com/${var.model_image_uri}"
+    image = "${data.aws_caller_identity.current.account_id}.dkr.ecr.${var.region}.amazonaws.com/${var.model_image_uri}"
     model_data_url = "s3://${aws_s3_bucket.sagemaker_bucket.bucket}/${var.model_artifact_path}"
     environment = {
       SAGEMAKER_PROGRAM = "inference.py"

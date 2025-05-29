@@ -1,5 +1,7 @@
 # AWS Region
-region = "us-east-1"
+region      = "us-east-1"
+environment = "dev"
+namespace   = "arc"
 
 # Tags
 tags = {
@@ -10,8 +12,8 @@ tags = {
 }
 
 # Existing VPC and Subnets
-vpc_id = "vpc-12345678"  # Replace with your actual VPC ID
-subnet_ids = ["subnet-12345678", "subnet-87654321"]  # Replace with your actual subnet IDs
+vpc_id = "vpc-0e6c09980580ecbf6"  # Replace with your actual VPC ID
+subnet_ids = ["subnet-066d0c78479b72e77", "subnet-064b80a494fed9835"]  # Replace with your actual subnet IDs
 
 # SageMaker Domain
 create_domain = true
@@ -29,7 +31,7 @@ notebook_volume_size = 100
 create_model = true
 model_name = "sagemaker-ai-model"
 # Replace with your actual account ID
-account_id = "123456789012"  # Replace this with your actual AWS account ID
+account_id = "884360309640"  # Replace this with your actual AWS account ID
 model_image_uri = "sagemaker-model-image:latest"
 model_artifact_path = "models/model.tar.gz"
 
@@ -41,7 +43,7 @@ initial_instance_count = 1
 instance_type = "ml.m5.large"
 
 # S3 Bucket
-sagemaker_bucket_name = "sagemaker-ai-bucket-UNIQUE-NAME-REPLACE"  # Replace with a globally unique bucket name
+sagemaker_bucket_name = "sagemaker-ai-bucket-sf68335"  # Replace with a globally unique bucket name
 
 # Code Repository
 create_code_repository = false

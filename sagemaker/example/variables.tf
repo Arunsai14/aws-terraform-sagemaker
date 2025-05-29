@@ -4,6 +4,16 @@ variable "region" {
   default     = "us-east-1"
 }
 
+variable "namespace" {
+  description = "Namespace for naming convention"
+  type        = string
+}
+
+variable "environment" {
+  description = "Environment (e.g., dev, prod)"
+  type        = string
+}
+
 variable "tags" {
   description = "Tags to apply to resources"
   type        = map(string)
@@ -13,15 +23,18 @@ variable "tags" {
   }
 }
 
-variable "vpc_id" {
-  description = "ID of the existing VPC"
-  type        = string
+variable "subnet_names" {
+  type        = list(string)
+  description = "List of subnet names to lookup"
+  default     = ["arc-poc-private-subnet-private-us-east-1a", "arc-poc-private-subnet-private-us-east-1b"]
 }
 
-variable "subnet_ids" {
-  description = "List of existing subnet IDs to use"
-  type        = list(string)
+variable "vpc_name" {
+  type        = string
+  description = "Name of the VPC to add the resources"
+  default     = "arc-poc-vpc"
 }
+
 
 variable "create_domain" {
   description = "Whether to create a SageMaker domain"
