@@ -312,11 +312,6 @@ variable "endpoint_name" {
   default     = null
 }
 
-variable "endpoint_config_name" {
-  description = "The name of the endpoint configuration to use"
-  type        = string
-  default     = null
-}
 
 variable "endpoint_deployment_config" {
   description = "The deployment configuration for an endpoint, which contains the desired deployment strategy and rollback configurations"
